@@ -11,7 +11,7 @@
   - [ ] guid
   - [ ] temporary link image
   - [ ] sqlite
-- [ ] GET /<customer code>/list
+- [ ] GET /customer code/list
 - [ ] Docker
 
 # Sources
