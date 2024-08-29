@@ -5,9 +5,10 @@
 - [x] Make a call to gemini using prompt
 - [x] Commit in github open
 - [ ] POST upload endpoint
-  - [ ] Check parameters
+  - [x] llm interface
+  - [x] Check parameters
     - [ ] Check base64 image
-  - [ ] make database and llm interface
+  - [ ] make database interface
   - [ ] guid
   - [ ] temporary link image
   - [ ] sqlite

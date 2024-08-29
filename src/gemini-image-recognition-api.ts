@@ -16,7 +16,7 @@ export class GeminiImageRecognitionAPI implements ImageRecognitionAPI {
 
     this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
     this.prompt =
-      'What is the number being measure in this device ? Please inform in human readeable form and only number and measurement';
+      'What is the number being measure in this device ? Please inform in human readeable form and only number';
   }
 
   async execute() {
