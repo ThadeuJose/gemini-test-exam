@@ -8,12 +8,21 @@
   - [x] llm interface
   - [x] Check parameters
     - [ ] Check base64 image
-  - [ ] make database interface
+  - [x] make database interface
   - [x] guid
-  - [ ] temporary link image
-  - [ ] sqlite
+  - [x] temporary link image
+  - [x] sqlite
 - [ ] GET /customer code/list
 - [ ] Docker
+
+# Refactor
+
+- [ ] extractMimeTypeAndData in Util
+- [ ] Sqlite
+  - [ ] more test
+  - [ ] no run initialization every query
+  - [ ] Migration
+  - [ ] Drizzle ?
 
 # Sources
 

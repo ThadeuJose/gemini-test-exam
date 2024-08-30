@@ -1,7 +1,7 @@
 import { AnyZodObject, z, ZodError } from 'zod';
 import { AppError } from './app-error';
 import { HttpStatus } from './http-status';
-import { ErrorReturn, ExpressRouteFunc } from './types';
+import { ErrorResponse, ExpressRouteFunc } from './types';
 
 export const uploadBodySchema = z
   .object({
@@ -36,7 +36,7 @@ export function validate(schema: AnyZodObject): ExpressRouteFunc {
       Object.assign(req, result);
       return next();
     } catch (error) {
-      let message: ErrorReturn = {
+      let message: ErrorResponse = {
         error_code: 'INTERNAL_SERVER_ERROR',
         error_description: `Something wrong with ${schema.description} validation`,
       };

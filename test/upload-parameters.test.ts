@@ -13,12 +13,26 @@ const fakeUUID: IdGenerator = {
   createId: jest.fn(() => '00000000-0000-0000-0000-000000000000'),
 };
 
+const fakeDatabase: Database = {
+  hasEntry: jest.fn(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (customer_code: string, measure_month: number, measure_type: string) =>
+      Promise.resolve(false),
+  ),
+  addEntry: jest.fn(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (customer_code: string, measure_month: number, measure_type: string) =>
+      Promise.resolve(),
+  ),
+};
+
 import request from 'supertest';
 import { app } from '../src/app';
 import {
   ImageRecognitionAPI,
   IdGenerator,
   ImageUploaderAPI,
+  Database,
 } from '../src/types';
 import { imageToBase64 } from './util';
 
@@ -26,6 +40,7 @@ jest.mock('../src/service-injection', () => ({
   getImageRecognitionAPI: () => fakeImageApi,
   getIdGenerator: () => fakeUUID,
   getImageUploaderAPI: () => fakeImageUploaderApi,
+  getDatabase: () => fakeDatabase,
 }));
 
 describe('POST /upload - validate parameters', () => {

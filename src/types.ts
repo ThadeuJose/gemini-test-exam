@@ -12,8 +12,22 @@ export interface IdGenerator {
   createId(): string;
 }
 
-export type ErrorReturn = {
-  error_code: 'INTERNAL_SERVER_ERROR' | 'INVALID_DATA';
+export interface Database {
+  hasEntry(
+    customer_code: string,
+    measure_month: number,
+    measure_type: string,
+  ): Promise<boolean>;
+
+  addEntry(
+    customer_code: string,
+    measure_month: number,
+    measure_type: string,
+  ): Promise<void>;
+}
+
+export type ErrorResponse = {
+  error_code: 'INTERNAL_SERVER_ERROR' | 'INVALID_DATA' | 'DOUBLE_REPORT';
   error_description: string;
 };
 
