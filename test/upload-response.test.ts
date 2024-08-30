@@ -1,41 +1,9 @@
-const fakeImageApi: ImageRecognitionAPI = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  execute: jest.fn((image: string) => Promise.resolve(64)),
-};
-
-const fakeImageUploaderApi: ImageUploaderAPI = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  uploadImage: jest.fn((image: string, filename: string) =>
-    Promise.resolve('imgUrl'),
-  ),
-};
-
-const fakeUUID: IdGenerator = {
-  createId: jest.fn(() => '00000000-0000-0000-0000-000000000000'),
-};
-
-const fakeDatabase: Database = {
-  hasEntry: jest.fn(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (customer_code: string, measure_month: number, measure_type: string) =>
-      Promise.resolve(false),
-  ),
-  addEntry: jest.fn(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (customer_code: string, measure_month: number, measure_type: string) =>
-      Promise.resolve(),
-  ),
-};
-
-import request from 'supertest';
-import { app } from '../src/app';
 import {
-  ImageRecognitionAPI,
-  IdGenerator,
-  ImageUploaderAPI,
-  Database,
-} from '../src/types';
-import { imageToBase64 } from './util';
+  fakeImageApi,
+  fakeUUID,
+  fakeImageUploaderApi,
+  fakeDatabase,
+} from './mock';
 
 jest.mock('../src/service-injection', () => ({
   getImageRecognitionAPI: () => fakeImageApi,
@@ -43,6 +11,10 @@ jest.mock('../src/service-injection', () => ({
   getImageUploaderAPI: () => fakeImageUploaderApi,
   getDatabase: () => fakeDatabase,
 }));
+
+import request from 'supertest';
+import { app } from '../src/app';
+import { imageToBase64 } from './util';
 
 describe('POST /upload - validate body', () => {
   it('should return correct UUID', async () => {

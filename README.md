@@ -12,11 +12,15 @@
   - [x] guid
   - [x] temporary link image
   - [x] sqlite
-- [ ] GET /customer code/list
+- [x] GET /customer code/list
 - [ ] Docker
 
 # Refactor
 
+- [x] Mocks
+- [ ] Merge Tests
+- [ ] transform createUploadService into a class
+- [ ] transform createCustomerHandler into a class
 - [ ] extractMimeTypeAndData in Util
 - [ ] Sqlite
   - [ ] more test

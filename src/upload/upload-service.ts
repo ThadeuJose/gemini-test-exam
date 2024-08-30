@@ -30,14 +30,24 @@ export async function createUploadService(
     throw new AppError(HttpStatus.CONFLICT, JSON.stringify(message));
   }
 
-  //add entry
-  await database.addEntry(customer_code, month, measure_type);
-
   const filename = `${customer_code}_${measure_type}`;
+  const image_url = await uploader.uploadImage(image, filename);
+  const measure_value = await api.execute(image);
+  const measure_uuid = idGenerator.createId();
+
+  //add entry
+  await database.addEntry(
+    customer_code,
+    measure_uuid,
+    measure_datetime,
+    measure_type,
+    image_url,
+  );
+
   const response: UploadResponse = {
-    image_url: await uploader.uploadImage(image, filename),
-    measure_value: await api.execute(image),
-    measure_uuid: idGenerator.createId(),
+    image_url,
+    measure_value,
+    measure_uuid,
   };
   return response;
 }

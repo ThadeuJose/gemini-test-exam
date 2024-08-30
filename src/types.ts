@@ -21,13 +21,25 @@ export interface Database {
 
   addEntry(
     customer_code: string,
-    measure_month: number,
+    measure_uuid: string,
+    measure_datetime: string,
     measure_type: string,
+    image_url: string,
   ): Promise<void>;
+
+  getEntries(
+    customer_code: string,
+    measure_type: 'GAS' | 'WATER' | 'ALL',
+  ): Promise<Measure[]>;
 }
 
 export type ErrorResponse = {
-  error_code: 'INTERNAL_SERVER_ERROR' | 'INVALID_DATA' | 'DOUBLE_REPORT';
+  error_code:
+    | 'INTERNAL_SERVER_ERROR'
+    | 'INVALID_DATA'
+    | 'DOUBLE_REPORT'
+    | 'INVALID_TYPE'
+    | 'MEASURES_NOT_FOUND';
   error_description: string;
 };
 
@@ -35,6 +47,19 @@ export type UploadResponse = {
   image_url: string;
   measure_value: number;
   measure_uuid: string;
+};
+
+export type Measure = {
+  measure_uuid: string;
+  measure_datetime: string;
+  measure_type: string;
+  has_confirmed: boolean;
+  image_url: string;
+};
+
+export type CustomerResponse = {
+  customer_code: string;
+  measures: Measure[];
 };
 
 export type ExpressRouteFunc =

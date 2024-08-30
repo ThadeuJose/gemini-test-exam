@@ -3,6 +3,28 @@ import { AppError } from './app-error';
 import { HttpStatus } from './http-status';
 import { ErrorResponse, ExpressRouteFunc } from './types';
 
+export const customerQuerySchema = z
+  .object({
+    query: z.object({
+      measure_type: z
+        .string()
+        .optional()
+        .refine(
+          (value) => {
+            if (value) {
+              return ['WATER', 'GAS'].includes(value.toUpperCase());
+            }
+            return true;
+          },
+          {
+            message:
+              'Measure type must be either "WATER" or "GAS" case insensitive.',
+          },
+        ),
+    }),
+  })
+  .describe('Customer Query Schema');
+
 export const uploadBodySchema = z
   .object({
     body: z.object({
@@ -41,12 +63,19 @@ export function validate(schema: AnyZodObject): ExpressRouteFunc {
         error_description: `Something wrong with ${schema.description} validation`,
       };
       if (error instanceof ZodError) {
-        message = {
-          error_code: 'INVALID_DATA',
-          error_description: error.issues
-            .map((issue) => issue.message)
-            .join(', '),
-        };
+        if (schema.description === 'Customer Query Schema') {
+          message = {
+            error_code: 'INVALID_TYPE',
+            error_description: 'Tipo de medição não permitida',
+          };
+        } else {
+          message = {
+            error_code: 'INVALID_DATA',
+            error_description: error.issues
+              .map((issue) => issue.message)
+              .join(', '),
+          };
+        }
       }
       return next(
         new AppError(HttpStatus.BAD_REQUEST, JSON.stringify(message)),

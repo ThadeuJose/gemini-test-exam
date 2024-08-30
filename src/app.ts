@@ -1,11 +1,12 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { createUploadHandler } from './upload/upload-handler';
-import { uploadBodySchema, validate } from './validate';
+import { customerQuerySchema, uploadBodySchema, validate } from './validate';
 import { HttpStatus } from './http-status';
 import { AppError } from './app-error';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import { join } from 'path';
+import { createCustomerHandler } from './customer/customer-handler';
 
 export const app = express();
 
@@ -19,6 +20,11 @@ app.use(cookieParser());
 // Serve static files
 app.use('/images', express.static(join(__dirname, 'images')));
 
+app.get(
+  '/:customer_code/list',
+  validate(customerQuerySchema),
+  createCustomerHandler(),
+);
 app.post('/upload', validate(uploadBodySchema), createUploadHandler());
 
 // Catch-all for 404 errors
