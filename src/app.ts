@@ -5,6 +5,7 @@ import { HttpStatus } from './http-status';
 import { AppError } from './app-error';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
+import { join } from 'path';
 
 export const app = express();
 
@@ -14,6 +15,9 @@ if (process.env.NODE_ENV !== 'test') {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Serve static files
+app.use('/images', express.static(join(__dirname, 'images')));
 
 app.post('/upload', validate(uploadBodySchema), createUploadHandler());
 
@@ -29,7 +33,6 @@ app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
     console.error(err.stack);
   }
   const status = err.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;
-  console.log(err.message);
 
   res.status(status).json(err.message);
 });

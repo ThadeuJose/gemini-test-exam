@@ -1,24 +1,34 @@
-const fakeApi: ImageRecognitionAPI = {
+const fakeImageApi: ImageRecognitionAPI = {
   execute: jest.fn(),
 };
 
+const fakeImageUploaderApi: ImageUploaderAPI = {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  uploadImage: jest.fn((image: string, filename: string) =>
+    Promise.resolve('imgUrl'),
+  ),
+};
+
+const fakeUUID: IdGenerator = {
+  createId: jest.fn(() => '00000000-0000-0000-0000-000000000000'),
+};
+
 import request from 'supertest';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { app } from '../src/app';
-import { ImageRecognitionAPI } from '../src/types';
+import {
+  ImageRecognitionAPI,
+  IdGenerator,
+  ImageUploaderAPI,
+} from '../src/types';
+import { imageToBase64 } from './util';
 
 jest.mock('../src/service-injection', () => ({
-  getImageRecognitionAPI: () => fakeApi,
+  getImageRecognitionAPI: () => fakeImageApi,
+  getIdGenerator: () => fakeUUID,
+  getImageUploaderAPI: () => fakeImageUploaderApi,
 }));
 
-function imageToBase64(filename: string) {
-  const imagePath = join(__dirname, 'test-image', filename);
-  const file = readFileSync(imagePath);
-  return `data:image/png;base64,${file.toString('base64')}`;
-}
-
-describe('POST /upload', () => {
+describe('POST /upload - validate parameters', () => {
   it('should accept request', async () => {
     const image = imageToBase64('2.jpg');
     const customerCode = 'string';

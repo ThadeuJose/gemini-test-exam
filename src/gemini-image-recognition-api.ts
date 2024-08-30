@@ -1,6 +1,6 @@
 import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
-import { readFileSync } from 'fs';
 import { ImageRecognitionAPI } from './types';
+import { extractMimeTypeAndData } from './util';
 
 export class GeminiImageRecognitionAPI implements ImageRecognitionAPI {
   genAI: GoogleGenerativeAI;
@@ -19,15 +19,13 @@ export class GeminiImageRecognitionAPI implements ImageRecognitionAPI {
       'What is the number being measure in this device ? Please inform in human readeable form and only number';
   }
 
-  async execute() {
-    const image = {
-      inlineData: {
-        data: Buffer.from(readFileSync('src/2.jpg')).toString('base64'),
-        mimeType: 'image/jpeg',
-      },
+  async execute(image: string): Promise<number> {
+    const { data, mimeType } = extractMimeTypeAndData(image);
+    const model = {
+      inlineData: { data, mimeType },
     };
 
-    const result = await this.model.generateContent([this.prompt, image]);
-    console.log(result.response.text());
+    const result = await this.model.generateContent([this.prompt, model]);
+    return parseInt(result.response.text(), 10);
   }
 }

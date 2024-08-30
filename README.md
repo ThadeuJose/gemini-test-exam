@@ -9,7 +9,7 @@
   - [x] Check parameters
     - [ ] Check base64 image
   - [ ] make database interface
-  - [ ] guid
+  - [x] guid
   - [ ] temporary link image
   - [ ] sqlite
 - [ ] GET /customer code/list
